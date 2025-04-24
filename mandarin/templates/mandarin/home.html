@@ -1,0 +1,54 @@
+{% extends "mandarin/base.html" %}
+
+
+{% block content %}
+
+<section id="lessons" class="container my-5 text-center">
+    <div class="container mt-5">
+        
+        <div style="text-align: left;">
+            <h2 class="h1-home text-center">Mandarin Lessons:</h2><br>
+            <div class="list-group">
+                {% for chapter in chapters %}
+                <a href="{% url 'chapter_detail' chapter.id %}" class="list-group-item list-group-item-action text-success">
+                    {{ chapter.title }}
+                    <small class="d-block text-muted">{{ chapter.lessons.count }} lessons</small>
+                </a>
+                {% empty %}
+                <p>No chapters found.</p>
+                {% endfor %}
+            </div>
+      </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center p-3">
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="text-success">About Me</h2>
+            <p class="text-success">
+                "Learning is possible!"
+                This is a simple project I made. My name is Roc. 
+                I like learning html, boxing, yoga and more. 
+                I created this app to practice and learn a new language. 
+                The goal is to learn, build and share. 
+            </p>
+        </div>
+        <div class="col-md-6">
+            <!-- Contact Section -->
+            <div id="contact" class="container my-3 text-center">
+                <h2>Get in Touch</h2>
+                <p>Feel free to reach out for collaborations or just to say hi!</p>
+                <a href="mailto:aivasmm101@gmail.com" class="btn btn-success">Email Me</a>
+            </div>
+        </div>
+        <p>&copy; 2025 webappbyroc | All Rights Reserved</p>
+    </div>
+</footer>
+
+
+
+
+{% endblock %}

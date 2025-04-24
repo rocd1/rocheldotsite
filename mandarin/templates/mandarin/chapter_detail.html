@@ -1,0 +1,31 @@
+{% extends "mandarin/base.html" %}
+
+{% block content %}
+
+<title>{{ chapter.name }}</title>
+
+<div class="container mt-5">
+  <h1 class="text-center text-success">{{ chapter.title }}</h1>
+  <p class="text-center">{{ chapter.description }}</p>
+  <br><br>
+  
+  <div style="text-align: left;">
+
+    <h4>Lessons:</h4>
+    <a href="{% url 'home' %}" class=" text-decoration-none mt-3">Back to Home</a>
+    <div class="list-group">
+      {% for lesson in lessons %}
+      <a href="{% url 'lesson_detail' lesson.id %}" class="list-group-item list-group-item-action text-success">
+        {{ lesson.title }}
+      </a>
+      {% empty %}
+      <p>No lessons found for this chapter.</p>
+      {% endfor %}
+    </div>
+    <br>
+  </div>
+</div>
+
+{% endblock %}
+
+

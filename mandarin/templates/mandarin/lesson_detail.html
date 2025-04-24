@@ -1,0 +1,155 @@
+{% extends "mandarin/base.html" %}
+
+{% block content %}
+
+<title>{{ lesson.title }}</title>
+
+<div class="container">
+    
+    <div class="container mt-5">
+        <h2 class="text-success text-center">{{ lesson.title }}</h2>
+        
+        <a href="{% url 'home' %}" class="text-decoration-none">Back to Home</a>
+    </div>
+    <hr>
+
+    <div class="container mt-2">
+        <p id="lessonContent" class="overflow-auto text-justify text-success" style="max-height: 150px; overflow-y: hidden;">
+            {{ lesson.content }}
+        </p>
+        <button id="toggleButton" class="btn btn-primary mt-2">See More</button>
+    </div>
+    
+
+    <div class="container mt-5">
+        <h4>Flashcards</h4>
+        <div class="row">
+            {% for flashcard in flashcards %}
+            <div class="col-md-3">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <!-- Front Side -->
+                        <div class="flip-card-front">
+                            <div class="row">
+                                <h3>{{ flashcard.chinese_character }}</h3>
+                                <p class="mx-3"><strong>Pinyin:</strong> {{ flashcard.pinyin }}</p>
+                            </div>
+                        </div>
+                        <!-- Back Side -->
+                        <div class="flip-card-back">
+                            <p><strong>Meaning:</strong> {{ flashcard.english_translation }}</p>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Flashcards Pagination -->
+    <div class="text-center">
+        {% if flashcards.has_previous %}
+            <a href="?flashcard_page={{ flashcards.previous_page_number }}">Previous</a>
+        {% endif %}
+    
+        <!-- Add page number links -->
+        {% for page in flashcards.paginator.page_range %}
+            {% if page == flashcards.number %}
+                <span>{{ page }}</span> <!-- Current page -->
+            {% else %}
+                <a href="?flashcard_page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+    
+        {% if flashcards.has_next %}
+            <a href="?flashcard_page={{ flashcards.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+    
+
+    <br>
+    <hr>
+    <div class="container mt-3">
+        <h4>Quizzes</h4>
+
+        <div style="text-align: left;">
+
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for quiz in quizzes %}
+                
+                <div class="mb-3 mt-3">
+                    <p><strong>{{ quiz.question }}</strong></p>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ quiz.id }}" value="A" id="q{{ quiz.id }}a">
+                        <label class="form-check-label" for="q{{ quiz.id }}a">{{ quiz.option_a }}</label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ quiz.id }}" value="B" id="q{{ quiz.id }}b">
+                        <label class="form-check-label" for="q{{ quiz.id }}b">{{ quiz.option_b }}</label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ quiz.id }}" value="C" id="q{{ quiz.id }}c">
+                        <label class="form-check-label" for="q{{ quiz.id }}c">{{ quiz.option_c }}</label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ quiz.id }}" value="D" id="q{{ quiz.id }}d">
+                        <label class="form-check-label" for="q{{ quiz.id }}d">{{ quiz.option_d }}</label>
+                    </div>
+                </div>
+                {% endfor %}
+                
+            <!-- Quizzes Pagination -->
+            <div class="text-center">
+                {% if quizzes.has_previous %}
+                    <a href="?quiz_page={{ quizzes.previous_page_number }}">Previous</a>
+                {% endif %}
+                <!-- Add page number links -->
+                {% for page in quizzes.paginator.page_range %}
+                    {% if page == quizzes.number %}
+                        <span>{{ page }}</span>
+                    <!-- Current page -->     
+                    {% else %}
+                        <a href="?quiz_page={{ page }}">{{ page }}</a>
+                    {% endif %}
+                {% endfor %}
+            
+                {% if quizzes.has_next %}
+                    <a href="?quiz_page={{ quizzes.next_page_number }}">Next</a>
+                {% endif %}
+            </div>
+                                  
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <hr>
+        </div>
+        <br><br>
+        
+        {% if results %}
+        <h5>Quiz Results</h5>
+        <p>You got {{ score }} out of {{ quizzes|length }} correct!</p>
+        <ul class="list-group mt-3">
+            {% for quiz_id, result in results.items %}
+            <li class="list-group-item">
+                <strong>{{ result.question }}</strong><br>
+                Your Answer: {{ result.user_answer }}<br>
+                Correct Answer: {{ result.correct_answer }}<br>
+                {% if result.is_correct %}
+                <span class="text-success">✅ Correct</span>
+                {% else %}
+                <span class="text-danger">❌ Incorrect</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}         
+    </div>
+</div>
+<br><br>
+
+{% endblock %}

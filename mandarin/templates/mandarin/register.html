@@ -1,0 +1,29 @@
+{% extends "mandarin/base.html" %}
+
+
+{% block content %}
+
+<br><br>
+    <div class="container text-start"> 
+        <h1 class="text-success">Register</h1><br> 
+        <form action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button><br><br>
+            <p>Already have an account? <a href="{% url 'login' %}" class="text-decoration-none">Login</a></p>
+        </form>
+        
+    </div>
+
+{% endblock %}
